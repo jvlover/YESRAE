@@ -13,11 +13,8 @@
     "@heroicons/react": "^2.0.18",
     "@material-tailwind/react": "^2.1.1",
     "axios": "^1.4.0",
-<<<<<<< HEAD
-    "pnpm": "^8.7.5",
-=======
     "eslint-plugin-tailwindcss": "^3.13.0",
->>>>>>> e3f4983a3f57422a8b6f8c5bae542906bb77abf1
+    "feather-icons": "^4.29.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.2",
