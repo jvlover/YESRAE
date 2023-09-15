@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
@@ -29,6 +30,20 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
+=======
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from '../src/pages/user/Login';
+import Regist from '../src/pages/user/Regist';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/regist" element={<Regist />} />
+      </Routes>
+    </Router>
+>>>>>>> e3f4983a3f57422a8b6f8c5bae542906bb77abf1
   );
 }
 
