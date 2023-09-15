@@ -31,6 +31,7 @@ export default function HeaderNav() {
         <li className="text-xl pt-1">플레이리스트</li>
         <li className="text-xl pt-1">이상형월드컵</li>
         <li className="text-xl pt-1">데일리퀴즈</li>
+        <li className="text-xl pt-1">마이페이지</li>
       </ul>
     </div>
   );
