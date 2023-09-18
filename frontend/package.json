@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@material-tailwind/react": "^2.1.1",
+    "@svgr/webpack": "^8.1.0",
     "axios": "^1.4.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
     "feather-icons": "^4.29.1",
