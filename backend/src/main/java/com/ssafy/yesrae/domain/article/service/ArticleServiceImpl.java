@@ -5,9 +5,9 @@ import com.ssafy.yesrae.common.exception.NotFoundException;
 import com.ssafy.yesrae.domain.article.dto.request.ArticleModifyPutReq;
 import com.ssafy.yesrae.domain.article.dto.request.ArticleRegistPostReq;
 import com.ssafy.yesrae.domain.article.dto.response.ArticleFindRes;
-import com.ssafy.yesrae.domain.article.entity.ArticleEntity;
-import com.ssafy.yesrae.domain.article.entity.PhotoEntity;
-import com.ssafy.yesrae.domain.article.entity.TagEntity;
+import com.ssafy.yesrae.domain.article.entity.Article;
+import com.ssafy.yesrae.domain.article.entity.Photo;
+import com.ssafy.yesrae.domain.article.entity.Tag;
 import com.ssafy.yesrae.domain.article.repository.ArticleRepository;
 import com.ssafy.yesrae.domain.article.repository.PhotoRepository;
 import com.ssafy.yesrae.domain.article.repository.TagRepository;
@@ -39,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public ArticleEntity registArticle(ArticleRegistPostReq articleRegistPostReq, MultipartFile files) {
+    public Article registArticle(ArticleRegistPostReq articleRegistPostReq, MultipartFile files) {
         boolean type = false;
         if (files != null) {
             log.info("ArticleService_registArticle_start: " + articleRepository.toString() + ", "
@@ -51,7 +51,7 @@ public class ArticleServiceImpl implements ArticleService{
         //TODO 작성자 정보 가져오기
 //        User user = userRepository.findById(registInfo.getUserId())
 //                .orElseThrow(UserNotFoundException::new);
-        TagEntity tagEntity = tagRepository.findById(articleRegistPostReq.getCategory())
+        Tag tag = tagRepository.findById(articleRegistPostReq.getCategory())
                 .orElseThrow(NotFoundException::new);
         Long category = articleRegistPostReq.getCategory();
         String content = articleRegistPostReq.getContent();
@@ -62,16 +62,16 @@ public class ArticleServiceImpl implements ArticleService{
 //            String imgPath = s3Service.saveFile(fileList);
 //            stImg = "URL"+imgPath;
 //        }
-        ArticleEntity articleEntity = ArticleEntity.builder()
+        Article article = Article.builder()
                 .content(content)
                 .title(title)
-                .tagEntity(tagEntity)
+                .tag(tag)
                 .type(type)
                 .build();
-        articleRepository.save(articleEntity);
-        articleEntity.insertArticle();
+        articleRepository.save(article);
+        article.insertArticle();
         log.info("StoreService_insertStore_end: success");
-        return articleEntity;
+        return article;
     }
     /**
      * 게시글 삭제 API
@@ -81,10 +81,10 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public Boolean deleteArticle(Long Id) {
         log.info("ArticleService_deleteArticle_start: ");
-        ArticleEntity articleEntity = articleRepository.findById(Id)
+        Article article = articleRepository.findById(Id)
                 .orElseThrow(NoDataException::new);
 
-        articleEntity.deleteArticle();
+        article.deleteArticle();
         log.info("ArticleService_deleteArticle_end: true");
         return true;
     }
@@ -99,21 +99,21 @@ public class ArticleServiceImpl implements ArticleService{
 
         log.info("ArticleService_findArticle_start: " + Id);
 
-        ArticleEntity articleEntity= articleRepository.findById(Id)
+        Article article = articleRepository.findById(Id)
                 .orElseThrow(NotFoundException::new);
         List<String> files = new ArrayList<>();
-        if(articleEntity.getType()){
-            List<PhotoEntity> pl = photoRepository.findByArticleEntity_Id(Id);
-            for(PhotoEntity p : pl){
+        if(article.getType()){
+            List<Photo> pl = photoRepository.findByArticleEntity_Id(Id);
+            for(Photo p : pl){
                 files.add(p.getImage());
             }
         }
 
         ArticleFindRes articleFindRes = ArticleFindRes.builder()
-                .content(articleEntity.getContent())
-                .tagName(articleEntity.getTagEntity().getTagName())
-                .title(articleEntity.getTitle())
-                .createdDate(articleEntity.getCreatedDate().toString())
+                .content(article.getContent())
+                .tagName(article.getTag().getTagName())
+                .title(article.getTitle())
+                .createdDate(article.getCreatedDate().toString())
                 .files(files)
 //                .nickname()
                 .build();
@@ -137,14 +137,14 @@ public class ArticleServiceImpl implements ArticleService{
             log.info("ArticleService_modifyArticle_start: " + articleModifyPutReq.toString());
         }
 
-        ArticleEntity articleEntity = articleRepository.findById(articleModifyPutReq.getId())
+        Article article = articleRepository.findById(articleModifyPutReq.getId())
                 .orElseThrow(NotFoundException::new);
         // TODO: 현재 로그인 유저의 id와 글쓴이의 id가 일치할 때
 //        if (storeEntity.getUser().getId().equals(modifyInfo.getUserId())) {
         // 점포 수정
-        TagEntity tagEntity = tagRepository.findById(articleModifyPutReq.getCategory())
+        Tag tag = tagRepository.findById(articleModifyPutReq.getCategory())
                 .orElseThrow(NullPointerException::new);
-        articleEntity.modifyArticle(articleModifyPutReq.getTitle(), articleModifyPutReq.getContent(), tagEntity);
+        article.modifyArticle(articleModifyPutReq.getTitle(), articleModifyPutReq.getContent(), tag);
 //          TODO : 사진 어떻게 처리할지 관리
         log.info("ArticleService_modifyArticle_end: true");
         return true;
@@ -165,7 +165,7 @@ public class ArticleServiceImpl implements ArticleService{
                                 .files(findArticleFiles(m))
                                 .content(m.getContent())
                                 .title(m.getTitle())
-                                .tagName(m.getTagEntity().getTagName())
+                                .tagName(m.getTag().getTagName())
                                 .createdDate(m.getCreatedDate().toString())
 //                              .nickname()
                                 .build()
@@ -179,11 +179,11 @@ public class ArticleServiceImpl implements ArticleService{
     /**
      * 파일 이름 List 생성을 위한 API
      */
-    List<String> findArticleFiles(ArticleEntity articleEntity){
+    List<String> findArticleFiles(Article article){
         List<String> files = new ArrayList<>();
-        if(articleEntity.getType()){
-            List<PhotoEntity> pl = photoRepository.findByArticleEntity_Id(articleEntity.getId());
-            for(PhotoEntity p : pl){
+        if(article.getType()){
+            List<Photo> pl = photoRepository.findByArticleEntity_Id(article.getId());
+            for(Photo p : pl){
                 files.add(p.getImage());
             }
         }

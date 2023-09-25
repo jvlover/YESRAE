@@ -8,7 +8,7 @@ import com.ssafy.yesrae.common.model.CommonResponse;
 import com.ssafy.yesrae.domain.article.dto.request.ArticleModifyPutReq;
 import com.ssafy.yesrae.domain.article.dto.request.ArticleRegistPostReq;
 import com.ssafy.yesrae.domain.article.dto.response.ArticleFindRes;
-import com.ssafy.yesrae.domain.article.entity.ArticleEntity;
+import com.ssafy.yesrae.domain.article.entity.Article;
 import com.ssafy.yesrae.domain.article.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -45,8 +45,8 @@ public class ArticleController {
             log.info("ArticleController_regist_start: " + articleRegistPostReq.toString());
         }
 
-        ArticleEntity articleEntity = articleService.registArticle(articleRegistPostReq, files);
-        if (articleEntity != null) {  // regist 성공하면 success
+        Article article = articleService.registArticle(articleRegistPostReq, files);
+        if (article != null) {  // regist 성공하면 success
             log.info("ArticleController_regist_end: success");
             return CommonResponse.success(SUCCESS);
         } else {    // 실패하면 Exception
@@ -118,12 +118,11 @@ public class ArticleController {
     @GetMapping()
     public CommonResponse<List<ArticleFindRes>> findAllArticle() {
         log.info("ArticleController_findAllArticle_start: ");
-        int[][] com = new int[2][3];
-        System.out.println(com[0].length);
         Optional<List<ArticleFindRes>> findRes = Optional.ofNullable(
                 articleService.findAllArticle());
 
         log.info("ArticleController_findAllArticle_end: " + findRes);
         return CommonResponse.success(findRes.orElseThrow(TemplateNoResultException::new));
     }
+
 }

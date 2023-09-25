@@ -16,11 +16,11 @@ import org.hibernate.annotations.Where;
 @Table(name = "photo")
 @Where(clause = "deleted_at is null")
 @Entity
-public class PhotoEntity extends BaseEntity {
+public class Photo extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="article_id", referencedColumnName = "Id")
-    private ArticleEntity articleEntity;
+    private Article article;
 
     @Column(nullable = false)
     private String image;
