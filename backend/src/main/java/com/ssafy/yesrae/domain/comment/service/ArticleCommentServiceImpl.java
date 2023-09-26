@@ -1,9 +1,11 @@
 package com.ssafy.yesrae.domain.comment.service;
 
+import com.ssafy.yesrae.common.exception.NoDataException;
 import com.ssafy.yesrae.common.exception.article.ArticleNotFoundException;
 import com.ssafy.yesrae.common.exception.user.UserNotFoundException;
 import com.ssafy.yesrae.domain.article.entity.Article;
 import com.ssafy.yesrae.domain.article.repository.ArticleRepository;
+import com.ssafy.yesrae.domain.comment.dto.request.ArticleCommentDeletePutReq;
 import com.ssafy.yesrae.domain.comment.dto.request.ArticleCommentRegistPostReq;
 import com.ssafy.yesrae.domain.comment.dto.response.ArticleCommentFindRes;
 import com.ssafy.yesrae.domain.comment.entity.ArticleComment;
@@ -94,7 +96,21 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
      * 게시글 댓글 삭제 (Soft Delete) API 에 대한 서비스
      */
     @Override
-    public boolean deleteArticleComment(Long articleCommentId) {
-        return false;
+    public boolean deleteArticleComment(ArticleCommentDeletePutReq articleCommentDeletePutReq) {
+
+        log.info("ArticleCommentService_deleteArticleComment_start: ");
+
+        ArticleComment articleComment = articleCommentRepository.findById(
+                articleCommentDeletePutReq.getArticleCommentId())
+            .orElseThrow(
+                NoDataException::new);
+        if (articleComment.getUser().getId().equals(articleCommentDeletePutReq.getUserId())) {
+            articleComment.deletedArticleComment();
+        } else {
+            return false;
+        }
+        
+        log.info("ArticleCommentService_deleteArticleComment_end: true ");
+        return true;
     }
 }

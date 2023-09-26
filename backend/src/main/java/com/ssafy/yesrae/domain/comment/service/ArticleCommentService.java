@@ -1,5 +1,6 @@
 package com.ssafy.yesrae.domain.comment.service;
 
+import com.ssafy.yesrae.domain.comment.dto.request.ArticleCommentDeletePutReq;
 import com.ssafy.yesrae.domain.comment.dto.request.ArticleCommentRegistPostReq;
 import com.ssafy.yesrae.domain.comment.dto.response.ArticleCommentFindRes;
 import com.ssafy.yesrae.domain.comment.entity.ArticleComment;
@@ -11,6 +12,6 @@ public interface ArticleCommentService {
 
     List<ArticleCommentFindRes> findArticleComment(Long ArticleId);
 
-    boolean deleteArticleComment(Long articleCommentId);
+    boolean deleteArticleComment(ArticleCommentDeletePutReq articleCommentDeletePutReq);
 
 }
