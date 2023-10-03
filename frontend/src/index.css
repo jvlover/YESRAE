@@ -14,7 +14,7 @@
     @apply text-sm text-white bg-gradient-to-r from-yesrae-0 to-yesrae-100 hover:bg-none hover:text-yesrae-100 focus:outline-none focus:ring-indigo-800 focus:ring-1;
   }
   .btn-secondary {
-    @apply text-sm text-white bg-gray-400;
+    @apply text-sm text-white bg-gray-700;
   }
 }
 
@@ -36,7 +36,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #09090B;
+  background-color: black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -44,4 +44,3 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-
